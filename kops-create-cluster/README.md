@@ -99,13 +99,13 @@ kops create cluster --name $CLUSTER \
 	--dns-zone $DNS_ZONE \
 	--dry-run --output yaml > cluster.yaml
 ```
-You an view and modify file as you like.
+You can view and modify file as you like.
 To create cluster from a previously generated files run:
 ```bash
 kops create -f cluster.yaml
 # Need to store ssh public key as a KOPS secret, before deploying cluster created from a configuration file
-kops create secret --name k8s.retipuj.com sshpublickey admin -i ~/.ssh/id_rsa.pub
-kops update cluster k8s.retipuj.com --yes
+kops create secret --name $CLUSTER sshpublickey admin -i ~/.ssh/id_rsa.pub
+kops update cluster $CLUSTER --yes
 # Reload kubecfg
 kops export kubecfg --admin
 ```
