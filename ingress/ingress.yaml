@@ -9,7 +9,8 @@ spec:
   tls:
   - hosts:
     - prometheus.k8s.retipuj.com
-    secretName: prom-tls
+    - grafana.k8s.retipuj.com
+    secretName: common-tls
   rules:
   - host: prometheus.k8s.retipuj.com
     http:
