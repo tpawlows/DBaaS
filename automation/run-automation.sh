@@ -37,8 +37,6 @@ sleep 40
 kubectl create ns cert-manager
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.4.0/cert-manager.crds.yaml
 helm install cert-manager  --namespace cert-manager jetstack/cert-manager
-kubectl apply -f cert-manager/cluster-issuer.yaml 
-kubectl apply -f cert-manager/common-cert.yaml
 sleep 120 
 
 # Deploy external-dns
@@ -54,6 +52,10 @@ helm install prom -f monitoring/prom-values.yaml prometheus-community/prometheus
 # an example password; change
 export STRONG_PASSWORD=k0psP@S456
 helm install graf -f dashboards/grafana-values.yaml --set adminPassword=$STRONG_PASSWORD grafana/grafana
+
+# Deploy ClusterIssuer and Certificate for exposed services
+kubectl apply -f cert-manager/cluster-issuer.yaml 
+kubectl apply -f cert-manager/common-cert.yaml
 
 echo "Cluster k8s.retipuj.com has been created!"
 echo "Available services:"
