@@ -192,7 +192,7 @@ data:
     pod_anti_affinity_pgbackrest: ""
     pod_anti_affinity_pgbouncer: ""
     scheduler_timeout: "3600"
-    service_type: "ClusterIP"
+    service_type: "LoadBalancer"
     sync_replication: "false"
     backrest_storage: "default"
     backup_storage: "default"
