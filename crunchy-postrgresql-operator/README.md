@@ -36,7 +36,7 @@ source ~.bashrc
 ## Installation
 ### Install PGO: the PostgreSQL Operator
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/CrunchyData/postgres-operator/v4.7.0/installers/kubectl/postgres-operator.yml
+kubectl apply -f postgres-operator.yml
 ```
 ### Create DNS record for PostgreSQL Operator
 The address of PGO will be pgo.k8s.retipuj.com
