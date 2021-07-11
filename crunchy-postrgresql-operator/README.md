@@ -41,11 +41,16 @@ kubectl apply -f postgres-operator.yml
 ```bash
 kubectl -n pgo edit service postgres-operator
 ```
-### Add annotation for external-dns
+### Add annotation of pgo for external-dns
 ```bash
 kubectl -n pgo annotate service postgres-operator "external-dns.alpha.kubernetes.io/hostname=pgo.k8s.retipuj.com"
 ```
-
+### Create Postgres cluster User and Password and save them as environment variables
+```bash
+# example
+export PGUSER=testuser
+export PGPASSWORD="pgP@ssword123"
+```
 ### Create PostgreSQL cluster
 The PostgreSQL cluster will:
 - be named **hippo** (the same name as demo cluster in official guides and tutorials)
@@ -56,35 +61,23 @@ The PostgreSQL cluster will:
 - be deployed with pgAdmin 4, which is a graphical tool to manage PostgreSQL database from a web browser.
 	- pgAdmin 4 will e available through DNS record: pgadmin4.k8s.retipuj.com
 	- Connection will be secured using TLS
-
 ```bash
-pgo create cluster -n pgo --metrics --service-type=LoadBalancer hippo
+pgo create cluster -n pgo --metrics --tls-only --service-type=LoadBalancer -u $PGUSER -p $PGPASSWORD hippo
 ```
-### Save displayed User and Password to environment variables
+### Add annotation of hippo cluster for external-dns
 ```bash
-# example
-export PGUSER=testuser
-export PGPASSWORD="=4K2C?=RRp.2QiN>0{nO{DHqa"
+kubectl -n pgo annotate service hippo  "external-dns.alpha.kubernetes.io/hostname=hippo.k8s.retipuj.com"
 ```
-
 ### Deploy pgAdmin 4 service
 ```bash
 pgo create pgadmin -n pgo hippo
 
 ```
-
-### Create DNS record for deployed PostgreSQL Cluster
-The address of PostgreSQL Cluster will be hippo.k8s.retipuj.com
-```bash
-TODO
-```
-
-### Create DNS record for pgAdmin 4
+### Add annotation of hippo cluster for external-dns
 The address of pgAdmin4 will be pgadmin4.k8s.retipuj.com
 ```bash
 TODO
 ```
-
 ## Validation
 
 ### Test cluster
@@ -93,7 +86,7 @@ pgo test -n pgo hippo
 ```
 ### Show information about cluster
 ```bash
-pgo show cluster -n pgo
+pgo show cluster -n pgo hippo
 ```
 ### Show cluster's users
 ```bash
