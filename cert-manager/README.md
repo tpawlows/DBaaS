@@ -35,7 +35,8 @@ helm install cert-manager  --namespace cert-manager jetstack/cert-manager
 ```bash
 kubectl apply -f cluster-issuer.yaml 
 ```
-### Deploy Certificate
+### Deploy Certificate for telemetry and pgadmin
 ```bash
 kubectl apply -f common-cert.yaml 
+kubectl apply -f pgadmin-cert.yaml 
 ```
