@@ -62,7 +62,7 @@ The PostgreSQL cluster will:
 	- pgAdmin 4 will e available through DNS record: pgadmin4.k8s.retipuj.com
 	- Connection will be secured using TLS
 ```bash
-pgo create cluster -n pgo --metrics --tls-only --service-type=LoadBalancer -u $PGUSER -p $PGPASSWORD hippo
+pgo create cluster -n pgo --metrics --tls-only --server-ca-secret=postgres-ca --server-tls-secret=hippo.tls --service-type=LoadBalancer --username $PGUSER --password $PGPASSWORD hippo 
 ```
 ### Add annotation of hippo cluster for external-dns
 ```bash
