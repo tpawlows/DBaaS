@@ -26,4 +26,4 @@ helm install graf -f grafana-values.yaml --set adminPassword=$STRONG_PASSWORD gr
 ```bash
 kubectl port-forward $GRAFANA_SERVICE 3000:3000
 ```
-Then check in a browser on **[http://127.0.0.1:9090](http://127.0.0.1:9090)** if you can access Prometheus server UI.
+Then check in a browser on **[http://127.0.0.1:3000](http://127.0.0.1:3000)** if you can access Grafana.
