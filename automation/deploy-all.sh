@@ -18,8 +18,8 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo add kube-state-metrics https://kubernetes.github.io/kube-state-metrics
 helm repo add grafana https://grafana.github.io/helm-charts
+helm repo add jetstack https://charts.jetstack.io
 helm repo update
-
 
 # Create k8s cluster 
 kops-create-cluster/private-single-az-cluster/private-single-az-cluster.sh k8s.retipuj.com retipuj.com 
