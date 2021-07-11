@@ -12,7 +12,7 @@ Cert-manager manages TLS certificates so a connection between user and a web ser
 ### Get Chart
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo add jetstack https://charts.jetstack.io
 helm repo update
 ```
 

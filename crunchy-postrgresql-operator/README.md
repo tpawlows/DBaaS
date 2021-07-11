@@ -13,7 +13,6 @@ chmod +x client-setup.sh
 ```bash
 export PGO_NAMESPACE=pgo
 kubectl create namespace "$PGO_NAMESPACE"
-Install the pgo client
 ```
 ### Add important environment variables to .bashrc.
 ```bash
@@ -38,11 +37,15 @@ source ~.bashrc
 ```bash
 kubectl apply -f postgres-operator.yml
 ```
-### Create DNS record for PostgreSQL Operator
-The address of PGO will be pgo.k8s.retipuj.com
+### Change postgres-operator service from ClusterIP to LoadBalancer
 ```bash
-TODO add entry to pgo service 
+kubectl -n pgo edit service postgres-operator
 ```
+### Add annotation for external-dns
+```bash
+kubectl -n pgo annotate service postgres-operator "external-dns.alpha.kubernetes.io/hostname=pgo.k8s.retipuj.com"
+```
+
 ### Create PostgreSQL cluster
 The PostgreSQL cluster will:
 - be named **hippo** (the same name as demo cluster in official guides and tutorials)
