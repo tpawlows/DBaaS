@@ -3,12 +3,6 @@ Enterprise open source PostgreSQL-as-a-Service.
 Version: 4.7.0
 
 ## Pre-installation
-### Install the pgo (PostgreSQL Operator) client
-```bash
-curl https://raw.githubusercontent.com/CrunchyData/postgres-operator/v4.7.0/installers/kubectl/client-setup.sh > client-setup.sh
-chmod +x client-setup.sh
-./client-setup.sh
-```
 ### Create a namespace
 ```bash
 export PGO_NAMESPACE=pgo
@@ -31,7 +25,6 @@ EOF
 ```bash
 source ~.bashrc
 ```
-
 ## Installation
 ### Install PGO: the PostgreSQL Operator
 ```bash
@@ -39,11 +32,17 @@ kubectl apply -f postgres-operator.yml
 ```
 ### Change postgres-operator service from ClusterIP to LoadBalancer
 ```bash
-kubectl -n pgo edit service postgres-operator
+kubectl -n pgo patch svc postgres-operator --type='json' -p '[{"op":"replace","path":"/spec/type","value":"LoadBalancer"}]'
 ```
 ### Add annotation of pgo for external-dns
 ```bash
 kubectl -n pgo annotate service postgres-operator "external-dns.alpha.kubernetes.io/hostname=pgo.k8s.retipuj.com"
+```
+### Setup the pgo (PostgreSQL Operator) client
+```bash
+curl https://raw.githubusercontent.com/CrunchyData/postgres-operator/v4.7.0/installers/kubectl/client-setup.sh > client-setup.sh
+chmod +x client-setup.sh
+./client-setup.sh
 ```
 ### Create Postgres cluster User and Password and save them as environment variables
 ```bash
