@@ -67,6 +67,11 @@ pgo create cluster -n pgo --metrics --tls-only --server-ca-secret=postgres-ca --
 ```bash
 kubectl -n pgo annotate service hippo  "external-dns.alpha.kubernetes.io/hostname=hippo.k8s.retipuj.com"
 ```
+# Connect postgres-exporter to prometheus
+```bash
+kubectl -n pgo annotate service hippo  "prometheus.io/scrape=true"
+kubectl -n pgo annotate service hippo  "prometheus.io/port=9187"
+```
 ### Deploy pgAdmin 4 service
 ```bash
 pgo create pgadmin -n pgo hippo

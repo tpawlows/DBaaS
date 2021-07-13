@@ -138,6 +138,10 @@ sleep 120
 # Add annotation of hippo cluster for external-dns
 kubectl -n pgo annotate service hippo  "external-dns.alpha.kubernetes.io/hostname=hippo.k8s.retipuj.com"
 
+# Connect postgres-exporter to prometheus
+kubectl -n pgo annotate service hippo  "prometheus.io/scrape=true"
+kubectl -n pgo annotate service hippo  "prometheus.io/port=9187"
+
 # Deploy pgAdmin 4 service
 pgo create pgadmin -n pgo hippo
 

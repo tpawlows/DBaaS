@@ -7,7 +7,6 @@
 - pgadmin.k8s.retipuj.com
 
 ## Tasks
-- connect hippo to prometheus
 - create dashboards for hippo
 - create schema for AWS and kubernetes
 - add benchmark
