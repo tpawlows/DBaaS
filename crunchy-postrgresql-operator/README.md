@@ -73,11 +73,7 @@ kubectl -n pgo annotate service hippo  "external-dns.alpha.kubernetes.io/hostnam
 pgo create pgadmin -n pgo hippo
 
 ```
-### Add annotation of hippo cluster for external-dns
-The address of pgAdmin4 will be pgadmin4.k8s.retipuj.com
-```bash
-TODO
-```
+
 ## Validation
 
 ### Test cluster
