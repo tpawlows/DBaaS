@@ -54,8 +54,8 @@ sleep 60
 # Deploy monitoring and dashboards
 helm install prom -f monitoring/prom-values.yaml prometheus-community/prometheus
 # an example password; change
-export STRONG_PASSWORD=k0psP@S456
-helm install graf -f dashboards/grafana-values.yaml --set adminPassword=$STRONG_PASSWORD grafana/grafana
+export GRAFANA_PASSWORD=k0psP@S456
+helm install graf -f dashboards/grafana-values.yaml --set adminPassword=$GRAFANA_PASSWORD grafana/grafana
 
 # Deploy ClusterIssuer and Certificate for exposed services
 kubectl apply -f cert-manager/cluster-issuer.yaml 

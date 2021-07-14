@@ -18,8 +18,8 @@ helm repo update
 
 ### Install Chart with custom values
 ```bash
-# set yourself a strong password in $STRONG_PASSWORD variable
-helm install graf -f grafana-values.yaml --set adminPassword=$STRONG_PASSWORD grafana/grafana
+# set yourself a strong password in $GRAFANA_PASSWORD variable
+helm install graf -f grafana-values.yaml --set adminPassword=$GRAFANA_PASSWORD grafana/grafana
 ```
 
 ### Verify Grafana server via port-forwarding
