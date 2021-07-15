@@ -436,7 +436,16 @@ plugins: []
 ## Configure grafana datasources
 ## ref: http://docs.grafana.org/administration/provisioning/#datasources
 ##
-datasources: {}
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: https://prometheus.k8s.retipuj.com
+      access: proxy
+      isDefault: true
+
 #  datasources.yaml:
 #    apiVersion: 1
 #    datasources:
@@ -489,6 +498,17 @@ dashboardProviders:
       editable: true
       options:
         path: /var/lib/grafana/dashboards/imported
+#  dashboardproviders.yaml:
+#    apiVersion: 1
+#    providers:
+#    - name: 'default'
+#      orgId: 1
+#      folder: ''
+#      type: file
+#      disableDeletion: false
+#      editable: true
+#      options:
+#        path: /var/lib/grafana/dashboards/default
 
 ## Configure grafana dashboard to import
 ## NOTE: To use dashboards you must also enable/configure dashboardProviders
@@ -500,11 +520,13 @@ dashboards:
   imported:
     postgres-exporter:
       gnetId: 9628
+      datasource: Prometheus
     node-exporter-full:
       gnetId: 1860
+      datasource: Prometheus
     nginx-ingress-controller:
       gnetId: 9614
-
+      datasource: Prometheus
   # default:
   #   some-dashboard:
   #     json: |
@@ -661,7 +683,7 @@ sidecar:
       # allow Grafana to replicate dashboard structure from filesystem
       foldersFromFilesStructure: false
   datasources:
-    enabled: false
+    enabled: true
     # label that the configmaps with datasources are marked with
     label: grafana_datasource
     # value of label that the configmaps with datasources are set to

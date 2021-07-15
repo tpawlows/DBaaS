@@ -40,7 +40,7 @@ sleep 40
 # Deploy cert-manager
 kubectl create ns cert-manager
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.4.0/cert-manager.crds.yaml
-helm install cert-manager  --namespace cert-manager jetstack/cert-manager
+helm install cert-manager --namespace cert-manager jetstack/cert-manager
 sleep 120 
 
 # Deploy external-dns
