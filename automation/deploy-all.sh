@@ -12,18 +12,34 @@ fi
 ROOT_DIR=$1
 cd $ROOT_DIR
 
-# Update HELM repository
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo add kube-state-metrics https://kubernetes.github.io/kube-state-metrics
-helm repo add grafana https://grafana.github.io/helm-charts
-helm repo add jetstack https://charts.jetstack.io
-helm repo update
+# # Update HELM repository
+# helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+# helm repo add bitnami https://charts.bitnami.com/bitnami
+# helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+# helm repo add kube-state-metrics https://kubernetes.github.io/kube-state-metrics
+# helm repo add grafana https://grafana.github.io/helm-charts
+# helm repo add jetstack https://charts.jetstack.io
+# helm repo update
 
-# Create k8s cluster 
-kops-create-cluster/private-single-az-cluster/private-single-az-cluster.sh k8s.retipuj.com retipuj.com 
-sleep 20
+# # Create and save configuration to s3
+# kops create cluster \
+# 	--name=k8s.retipuj.com \
+# 	--dns-zone=retipuj.com \
+# 	--zones="eu-north-1a" \
+# 	--cloud=aws \
+# 	--node-count=1 \
+# 	--master-volume-size=32 \
+# 	--node-volume-size=32 \
+# 	--topology=private \
+# 	--networking=kube-router 
+# echo "Cluster configuration saved to: $KOPS_STATE_STORE"
+
+# # Create actual cluster on AWS
+# kops update cluster k8s.retipuj.com --yes --admin
+
+# # Wait for kOps to create cluster (about 12 min) 
+# kops validate cluster --wait 15m
+# sleep 60
 
 # Create namespace for Postgres
 kubectl create ns pgo
@@ -125,6 +141,7 @@ sleep 120
 
 # # Add annotation of pgo for external-dns
 kubectl -n pgo annotate service postgres-operator "external-dns.alpha.kubernetes.io/hostname=pgo.k8s.retipuj.com"
+sleep 120
 
 # Setup PGO client
 curl https://raw.githubusercontent.com/CrunchyData/postgres-operator/v4.7.0/installers/kubectl/client-setup.sh > client-setup.sh
