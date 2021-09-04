@@ -50,30 +50,27 @@ deploy_k8_cluster() {
 
 }
 
-deploy_ingress() {
-
-    # Ingress
-    kubectl apply -f ingress/ingress.yaml 
-
-    # NGINX Ingress Controller
+create_namespaces() {
     kubectl create ns ingress
-    helm install nginx-ingress-controller -f nginx-ingress-controller/nginx-ingress-values.yaml  -n ingress ingress-nginx/ingress-nginx
+    kubectl create ns cert-manager
+    # Postgres Operator 
+    kubectl create ns pgo
+}
 
+deploy_ingress_controller() {
+    # NGINX Ingress Controller
+    helm install nginx-ingress-controller -f nginx-ingress-controller/nginx-ingress-values.yaml  -n ingress ingress-nginx/ingress-nginx
 }
 
 deploy_cert_manager() {
 
-    kubectl create ns cert-manager
     kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.4.0/cert-manager.crds.yaml
     helm install cert-manager --namespace cert-manager jetstack/cert-manager
 
     # Deploy ClusterIssuer and Certificate for exposed services
     kubectl apply -f cert-manager/cluster-issuer.yaml 
-    kubectl apply -f cert-manager/common-cert.yaml
+    kubectl apply -f cert-manager/monitoring-cert.yaml
     kubectl apply -f cert-manager/pgadmin-cert.yaml 
-
-    # Create Ingress for pgAdmin4
-    kubectl apply -f pgadmin-ingress.yaml
 
 }
 
@@ -89,6 +86,9 @@ deploy_external_dns() {
 
 deploy_monitoring() {
     
+    # Deploy Ingress for monitoring
+    kubectl apply -f ingress/monitoring-ingress.yaml 
+
     # Deploy monitoring and dashboards
     helm install prom -f monitoring/prom-values.yaml prometheus-community/prometheus
     
@@ -100,9 +100,10 @@ deploy_monitoring() {
 
 setup_tls_for_postgres() {
 
-    sudo cp /usr/lib/ssl/openssl.cnf .
-    sudo chmod 777 openssl.cnf 
-    sed -i 's/# req_extensions = v3_req/req_extensions = v3_req/g' openssl.cnf
+    mkdir certificates
+    sudo cp /usr/lib/ssl/openssl.cnf certificates/
+    sudo chmod 777 certificates/openssl.cnf 
+    sed -i 's/# req_extensions = v3_req/req_extensions = v3_req/g' certificates/openssl.cnf
 
     # Generate CA
     openssl req \
@@ -112,8 +113,8 @@ setup_tls_for_postgres() {
     -pkeyopt ec_paramgen_curve:prime256v1 \
     -pkeyopt ec_param_enc:named_curve \
     -sha384 \
-    -keyout ca.key \
-    -out ca.crt \
+    -keyout certificates/ca.key \
+    -out certificates/ca.crt \
     -days 3650 \
     -extensions v3_ca \
     -subj "/CN=*"
@@ -126,34 +127,31 @@ setup_tls_for_postgres() {
     -pkeyopt ec_paramgen_curve:prime256v1 \
     -pkeyopt ec_param_enc:named_curve \
     -sha384 \
-    -keyout server.key \
-    -out server.csr \
+    -keyout certificates/server.key \
+    -out certificates/server.csr \
     -days 365 \
     -subj "/CN=hippo.pgo"
 
     # Create the server Certificate
     openssl x509 \
     -req \
-    -in server.csr \
+    -in certificates/server.csr \
     -days 365 \
-    -CA ca.crt \
-    -CAkey ca.key \
+    -CA certificates/ca.crt \
+    -CAkey certificates/ca.key \
     -CAcreateserial \
     -sha384 \
-    -extfile openssl.cnf \
+    -extfile certificates/openssl.cnf \
     -extensions v3_req \
-    -out server.crt
+    -out certificates/server.crt
 
     # Create kubernets secrets for the CA and the server certificate
-    kubectl create secret generic -n pgo postgres-ca --from-file=ca.crt=ca.crt
-    kubectl create secret tls -n pgo hippo.tls --key=server.key --cert=server.crt
+    kubectl create secret generic -n pgo postgres-ca --from-file=ca.crt=certificates/ca.crt
+    kubectl create secret tls -n pgo hippo.tls --key=certificates/server.key --cert=certificates/server.crt
 
 }
 
 deploy_pgo() {
-    
-    # Create namespace for Postgres
-    kubectl create ns pgo
 
     # Create Postgresql Operator in pgo namespace
     kubectl apply -f crunchy-postrgresql-operator/postgres-operator.yml
@@ -163,7 +161,7 @@ deploy_pgo() {
     kubectl -n pgo patch svc postgres-operator --type='json' -p '[{"op":"replace","path":"/spec/type","value":"LoadBalancer"}]'
     sleep 120
 
-    # # Add annotation of pgo for external-dns
+    # Add annotation of pgo for external-dns
     kubectl -n pgo annotate service postgres-operator "external-dns.alpha.kubernetes.io/hostname=pgo.k8s.retipuj.com"
     sleep 120
 
@@ -191,14 +189,20 @@ deploy_postgres_cluster() {
     # Deploy pgAdmin 4 service
     pgo create pgadmin -n pgo hippo
 
+    # Create Ingress for pgAdmin4
+    kubectl apply -f ingress/pgadmin-ingress.yaml
+    
 }
-
 
 setup_helm
 deploy_k8_cluster
-deploy_ingress
+sleep 60 # let's give cluster some time to be sure it's ready
+create_namespaces
+deploy_ingress_controller
 deploy_cert_manager
 deploy_external_dns
 deploy_monitoring
 setup_tls_for_postgres
+deploy_pgo
+setup_pgo
 deploy_postgres_cluster
