@@ -9,4 +9,4 @@ spec:
     kind: ClusterIssuer
   secretName: pgadmin-tls
   dnsNames:
-  - pgadmin.k8s.retipuj.com
+  - pgadmin4.k8s.retipuj.com
