@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - pgadmin.k8s.retipuj.com
+    - pgadmin4.k8s.retipuj.com
     secretName: pgadmin-tls
   rules:
-  - host: pgadmin.k8s.retipuj.com
+  - host: pgadmin4.k8s.retipuj.com
     http:
       paths:
       - pathType: Prefix
