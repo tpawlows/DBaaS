@@ -8,7 +8,7 @@ Version: 4.7.0
 export PGO_NAMESPACE=pgo
 kubectl create namespace "$PGO_NAMESPACE"
 ```
-### Add important environment variables to .bashrc.
+### Add VERY important environment variables to .bashrc.
 ```bash
 cat <<EOF >> ~/.bashrc
 export PGOUSER="${HOME?}/.pgo/pgo/pgouser"
