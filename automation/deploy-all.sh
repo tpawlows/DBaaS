@@ -59,7 +59,7 @@ create_namespaces() {
 
 deploy_ingress_controller() {
     # NGINX Ingress Controller
-    helm install nginx-ingress-controller -f nginx-ingress-controller/nginx-ingress-values.yaml  -n ingress ingress-nginx/ingress-nginx
+    helm install nginx-ingress-controller -f nginx-ingress-controller/nginx-ingress-values.yaml -n ingress ingress-nginx/ingress-nginx
 }
 
 deploy_cert_manager() {
