@@ -98,56 +98,25 @@ deploy_monitoring() {
 
 }
 
+
 setup_tls_for_postgres() {
-
-    mkdir certificates
-    sudo cp /usr/lib/ssl/openssl.cnf certificates/
-    sudo chmod 777 certificates/openssl.cnf 
-    sed -i 's/# req_extensions = v3_req/req_extensions = v3_req/g' certificates/openssl.cnf
-
-    # Generate CA
-    openssl req \
-    -x509 \
-    -nodes \
-    -newkey ec \
-    -pkeyopt ec_paramgen_curve:prime256v1 \
-    -pkeyopt ec_param_enc:named_curve \
-    -sha384 \
-    -keyout certificates/ca.key \
-    -out certificates/ca.crt \
-    -days 3650 \
-    -extensions v3_ca \
-    -subj "/CN=*"
-
-    # Generate the Certificate Signing Request (CSR)
-    openssl req \
-    -new \
-    -newkey ec \
-    -nodes \
-    -pkeyopt ec_paramgen_curve:prime256v1 \
-    -pkeyopt ec_param_enc:named_curve \
-    -sha384 \
-    -keyout certificates/server.key \
-    -out certificates/server.csr \
-    -days 365 \
-    -subj "/CN=hippo.pgo"
-
-    # Create the server Certificate
-    openssl x509 \
-    -req \
-    -in certificates/server.csr \
-    -days 365 \
-    -CA certificates/ca.crt \
-    -CAkey certificates/ca.key \
-    -CAcreateserial \
-    -sha384 \
-    -extfile certificates/openssl.cnf \
-    -extensions v3_req \
-    -out certificates/server.crt
-
-    # Create kubernets secrets for the CA and the server certificate
-    kubectl create secret generic -n pgo postgres-ca --from-file=ca.crt=certificates/ca.crt
-    kubectl create secret tls -n pgo hippo.tls --key=certificates/server.key --cert=certificates/server.crt
+    ```
+        Setup secure conections for postgres cluster.
+        For more information, please refer to:
+        https://blog.crunchydata.com/blog/using-cert-manager-to-deploy-tls-for-postgres-on-kubernetes
+    ```    
+    git clone git@github.com:tpawlows/postgres-operator-examples.git
+    
+    # deploy: 
+    # - self-signed Certificate Isuuer
+    # - common certificate authority (CA) certificate
+    # - CA certificate issuer using the generated CA certificate
+    kubectl apply -k kustomize/certmanager/certman
+    
+    # deploy certificate for Postgres Cluster
+    kubectl apply -f cert-manager/hippo-cert.yaml 
+    # and replicas
+    # TODO
 
 }
 
@@ -159,7 +128,7 @@ deploy_pgo() {
 
     # Change postgres-operator service from ClusterIP to LoadBalancer
     kubectl -n pgo patch svc postgres-operator --type='json' -p '[{"op":"replace","path":"/spec/type","value":"LoadBalancer"}]'
-    sleep 120
+    sleep 5
 
     # Add annotation of pgo for external-dns
     kubectl -n pgo annotate service postgres-operator "external-dns.alpha.kubernetes.io/hostname=pgo.k8s.retipuj.com"
@@ -178,7 +147,12 @@ setup_pgo() {
 deploy_postgres_cluster() {
     
     # Create PostgreSQL cluster called hippo
-    pgo create cluster -n pgo --metrics --tls-only --server-ca-secret=postgres-ca --server-tls-secret=hippo.tls --service-type=LoadBalancer --username $PGUSER --password $PGPASSWORD hippo 
+    pgo create cluster -n pgo --metrics --tls-only                              \
+        --server-ca-secret=hippo-tls --server-tls-secret=hippo-tls              \
+        --service-type=LoadBalancer --username $PGUSER --password $PGPASSWORD   \
+        hippo 
+ 
+
     # Add annotation of hippo cluster for external-dns
     kubectl -n pgo annotate service hippo  "external-dns.alpha.kubernetes.io/hostname=hippo.k8s.retipuj.com"
 

@@ -1,3 +1,6 @@
+#  :warning:  This metho is deprecated :warning:
+### Use method [cert-manager method](https://blog.crunchydata.com/blog/using-cert-manager-to-deploy-tls-for-postgres-on-kubernetes) instead. It is already implemented in this repository.
+
 # TLS for Postgres cluster
 This readme provides instructions for creating CA certificates for Postgres cluster created using Crunchy's Postgres Operator.
 For more detailed information please read articles below as this steps are based on this articles:

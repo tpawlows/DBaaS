@@ -1,0 +1,19 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: hippo-cert
+  namespace: pgo
+spec:
+  isCA: false
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - digital signature
+    - key encipherment
+  issuerRef:
+    name: ca-issuer
+    kind: ClusterIssuer
+  secretName: hippo-tls
+  dnsNames:
+  - hippo.k8s.retipuj.com

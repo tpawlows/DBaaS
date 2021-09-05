@@ -40,3 +40,22 @@ kubectl apply -f cluster-issuer.yaml
 kubectl apply -f common-cert.yaml 
 kubectl apply -f pgadmin-cert.yaml 
 ```
+### Setup TLS for Postgres Cluster
+A PGO-managed Postgres needs at least 2 certificates:
+- One certificate is for the Postgres cluster itself and is used to both identify the cluster and encrypt communications
+- Second certificate is used for replication authentication
+
+More detailed information: [using-cert-manager-to-deploy-tls-for-postgres-on-kubernetes](https://blog.crunchydata.com/blog/using-cert-manager-to-deploy-tls-for-postgres-on-kubernetes)
+```bash
+git clone git@github.com:tpawlows/postgres-operator-examples.git
+# It will deploy:
+# - self-signed Certificate Isuuer
+# - common certificate authority (CA) certificate
+# - CA certificate issuer using the generated CA certificate
+kubectl apply -k kustomize/certmanager/certman
+
+# Deploy first certificate
+kubectl apply -f cert-manager/hippo-cert.yaml
+
+# Replication certificate WIP
+```
