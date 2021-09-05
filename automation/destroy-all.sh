@@ -2,6 +2,8 @@
 # This scripts runs every command necessary for destroying 
 # whole DbaaS and that is run on top of k8s cluster on AWS
 
+PGO_EXAMPLES_DIR="postgres-operator-examples"
+
 if [ $# -eq 0 ]; then
     echo "Please provide a path to the root directory of DBaaS repository."
     echo "exiting.."
@@ -22,3 +24,6 @@ helm uninstall external-dns
 helm uninstall cert-manager -n cert-manager
 helm uninstall nginx-ingress-controller -n ingress
 kops delete cluster k8s.retipuj.com --yes
+
+if [ -d "$PGO_EXAMPLES_DIR" ]; then rm -rf $PGO_EXAMPLES_DIR; fi
+rm client-setup.sh
