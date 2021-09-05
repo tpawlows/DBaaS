@@ -100,18 +100,18 @@ deploy_monitoring() {
 
 
 setup_tls_for_postgres() {
-    ```
-        Setup secure conections for postgres cluster.
-        For more information, please refer to:
-        https://blog.crunchydata.com/blog/using-cert-manager-to-deploy-tls-for-postgres-on-kubernetes
-    ```    
+
+    # Setup secure conections for postgres cluster.
+    # For more information, please refer to:
+    # https://blog.crunchydata.com/blog/using-cert-manager-to-deploy-tls-for-postgres-on-kubernetes
+        
     git clone git@github.com:tpawlows/postgres-operator-examples.git
     
     # deploy: 
     # - self-signed Certificate Isuuer
     # - common certificate authority (CA) certificate
     # - CA certificate issuer using the generated CA certificate
-    kubectl apply -k kustomize/certmanager/certman
+    kubectl apply -k postgres-operator-examples/kustomize/certmanager/certman
     
     # deploy certificate for Postgres Cluster
     kubectl apply -f cert-manager/hippo-cert.yaml 
