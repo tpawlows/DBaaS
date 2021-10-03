@@ -11,7 +11,7 @@ Works on WSL version 2 with Ubuntu 20.04 LTS but should work also on normal Ubun
 	gh_pat: 		"ghp_1234567890qwerty12309876321"       	# Personal Access Token for github.com
 	grafana_password: 	"example_password"  			    	# Password for deployed grafana admin user
 	pg_password: 		"example_password"  				# Password for deployed postgres cluster
-    kops_state_store:          "s3://example_bucket"                           # s3 bucket for kops state
+    kops_state_store:       "s3://example_bucket"                           # s3 bucket for kops state
 	```
 	This file will store sensitive data for accessing github, aws, deployed services and Postgres DB, and will be used during WSL machine configuration.
 2. Run command.
