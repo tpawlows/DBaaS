@@ -1,10 +1,19 @@
 # DBaaS
 
 ## Tasks
-- create dashboards for hippo
+- fix CSRF Token error (psql&pgadmin4 connection with DB)
+- add TLS for communication Primary <-> Replica
+- create dashboards for testcases
 - create schema for AWS and kubernetes
-- add benchmark
-- define test scenarios
+- create baseline for benchmarks
+- write test scenarios for:
+  - scale in
+  - scale out
+  - scale up
+  - scale down
+  - version upgrade
+  - backup
+
 
 ## Aavailable services
 - hippo.k8s.retipuj.com
