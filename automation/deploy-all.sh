@@ -32,16 +32,16 @@ deploy_k8_cluster() {
     # Create and save configuration to s3
     kops create -f kops-create-cluster/ha-cluster/ha-cluster.yaml 
     echo "Cluster configuration saved to: $KOPS_STATE_STORE"
-    kops create secret --name $CLUSTER sshpublickey admin -i ~/.ssh/id_rsa.pub
+    kops create secret --name k8s.retipuj.com sshpublickey admin -i ~/.ssh/id_rsa.pub
 
     # Create actual cluster on AWS
     kops update cluster k8s.retipuj.com --yes --admin
 
     # Wait for kOps to create cluster (about 12 min) 
-    kops validate cluster --wait 15m
+    kops validate cluster --wait 6m
     # might be a problem with kubecfg
     kops export kubecfg --admin
-    kops validate cluster --wait 15m
+    kops validate cluster --wait 8m
 }
 
 create_namespaces() {
