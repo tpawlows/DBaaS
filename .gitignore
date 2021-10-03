@@ -3,3 +3,4 @@ postgres-operator-examples/**
 client-setup.sh
 certificates
 certificates/**
+.dbaas.configuration
