@@ -30,24 +30,18 @@ setup_helm() {
 deploy_k8_cluster() {
 
     # Create and save configuration to s3
-    kops create cluster \
-	    --name=k8s.retipuj.com \
-	    --dns-zone=retipuj.com \
-	    --zones="eu-north-1a" \
-	    --cloud=aws \
-	    --node-count=1 \
-	    --master-volume-size=32 \
-	    --node-volume-size=32 \
-	    --topology=private \
-	    --networking=kube-router 
+    kops create -f kops-create-cluster/ha-cluster/ha-cluster.yaml 
     echo "Cluster configuration saved to: $KOPS_STATE_STORE"
+    kops create secret --name $CLUSTER sshpublickey admin -i ~/.ssh/id_rsa.pub
 
     # Create actual cluster on AWS
     kops update cluster k8s.retipuj.com --yes --admin
 
     # Wait for kOps to create cluster (about 12 min) 
     kops validate cluster --wait 15m
-
+    # might be a problem with kubecfg
+    kops export kubecfg --admin
+    kops validate cluster --wait 15m
 }
 
 create_namespaces() {
@@ -157,10 +151,11 @@ deploy_postgres_cluster() {
         if [ -z "$pgo_error" ]; then
 
             # Create PostgreSQL cluster called hippo
-            pgo create cluster -n pgo --metrics --tls-only                              \
-                --server-ca-secret=hippo-tls --server-tls-secret=hippo-tls              \
-                --service-type=LoadBalancer --username $PGUSER --password $PGPASSWORD   \
-                hippo
+            pgo create cluster -n pgo --metrics --tls-only                                          \
+                --server-ca-secret=hippo-tls --server-tls-secret=hippo-tls                          \
+                --service-type=LoadBalancer --username $PGUSER --password $PGPASSWORD               \
+                --pod-anti-affinity=preferred --node-label=kops.k8s.io/instancegroup=hippo-nodes    \
+                --node-affinity-type=required --toleration=dedicated=hippo-cluster:NoSchedule hippo
 
             # Add annotation of hippo cluster for external-dns
             kubectl -n pgo annotate service hippo  "external-dns.alpha.kubernetes.io/hostname=hippo.k8s.retipuj.com"
