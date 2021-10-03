@@ -36,17 +36,33 @@ curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://
 chmod +x kops-linux-amd64
 sudo mv kops-linux-amd64 /usr/local/bin/kops
 
+# ssh key for connecting with k8s cluster
+ssh-keygen -t rsa -N '' -f /home/$(whoami)/.ssh/id_rsa
+
+# s3 store for kops k8s cluster
+echo "export KOPS_STATE_STORE=$(grep kops_state_store ~/.dbaas.configuration | cut -d \" -f2)" >> ~/.bashrc
+
 # install awscli
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
 
-# configure awscli
+# configure awscli with autocompleter
 aws_access_key=$(cat .dbaas.configuration | grep aws_access_key | cut -d \" -f2)
 aws_secret_key=$(c)
 aws_region="eu-north-1"
 aws_format="json"
 echo -e "${aws_access_key}\n${aws_secret_key}\n${aws_region}\n${aws_format}" | aws configure
+cat <<EOF >> ~/.bashrc
+complete -C '/usr/local/bin/aws_completer' aws
+export PATH=/usr/local/aws/bin:\$PATH
+EOF
+
+# export aws credntials for kops
+export aws_access_key_id=$(grep aws_access_key_id ~/.aws/credentials | awk '{print $3}')
+export aws_secret_access_key=$(grep aws_secret_access_key ~/.aws/credentials | awk '{print $3}')
+export KOPS_STATE_STORE=$BUCKET
+
 
 # install pgo-client
 curl https://raw.githubusercontent.com/CrunchyData/postgres-operator/v4.7.3/installers/kubectl/client-setup.sh > client-setup.sh
