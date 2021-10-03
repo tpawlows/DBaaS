@@ -72,6 +72,7 @@ chmod +x client-setup.sh
 # add enviroment variables for pgo
 cat <<EOF >> ~/.bashrc
 # PGO
+export PATH=/home/\$(whoami)/.pgo/pgo:\$PATH
 export PGOUSER="${HOME?}/.pgo/pgo/pgouser"
 export PGO_CA_CERT="${HOME?}/.pgo/pgo/client.crt"
 export PGO_CLIENT_CERT="${HOME?}/.pgo/pgo/client.crt"
