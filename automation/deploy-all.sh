@@ -105,7 +105,7 @@ setup_tls_for_postgres() {
     # For more information, please refer to:
     # https://blog.crunchydata.com/blog/using-cert-manager-to-deploy-tls-for-postgres-on-kubernetes
         
-    git clone git@github.com:tpawlows/postgres-operator-examples.git
+    git clone https://github.com/tpawlows/postgres-operator-examples.git
     
     # deploy: 
     # - self-signed Certificate Isuuer
