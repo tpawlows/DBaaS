@@ -181,7 +181,7 @@ deploy_postgres_cluster() {
 
 setup_helm
 deploy_k8_cluster
-sleep 60 # let's give cluster some time to be sure it's ready
+sleep 120 # let's give cluster some time to be sure it's ready
 create_namespaces
 deploy_ingress_controller
 deploy_cert_manager
