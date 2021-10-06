@@ -87,7 +87,6 @@ deploy_monitoring() {
     helm install prom -f monitoring/prom-values.yaml prometheus-community/prometheus
     
     # an example password; change
-    export GRAFANA_PASSWORD=k0psP@S456
     helm install graf -f dashboards/grafana-values.yaml --set adminPassword=$GRAFANA_PASSWORD grafana/grafana
 
 }
