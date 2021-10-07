@@ -1,0 +1,20 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: "2021-10-07T18:04:20Z"
+  labels:
+    kops.k8s.io/cluster: k8s.retipuj.com
+  name: hippo-nodes-pgo-eu-north-1a
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20210907
+  machineType: t3.small
+  maxSize: 2
+  minSize: 2
+  nodeLabels:
+    kops.k8s.io/instancegroup: hippo-nodes
+  role: Node
+  rootVolumeSize: 32
+  subnets:
+  - eu-north-1a
+  taints:
+  - dedicated=hippo-cluster:NoSchedule
