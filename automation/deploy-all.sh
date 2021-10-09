@@ -150,8 +150,8 @@ deploy_postgres_cluster() {
         if [ -z "$pgo_error" ]; then
 
             # Create PostgreSQL cluster called hippo
-            pgo create cluster -n pgo --metrics --tls-only                                          \
-                --server-ca-secret=hippo-tls --server-tls-secret=hippo-tls                          \
+            pgo create cluster -n pgo --metrics \ #--tls-only                                          \
+                \ #--server-ca-secret=hippo-tls --server-tls-secret=hippo-tls                          \
                 --service-type=LoadBalancer --username $PGUSER --password $PGPASSWORD               \
                 --pod-anti-affinity=preferred --node-label=kops.k8s.io/instancegroup=hippo-nodes    \
                 --node-affinity-type=required --toleration=dedicated=hippo-cluster:NoSchedule hippo
@@ -183,10 +183,10 @@ deploy_k8_cluster
 sleep 120 # let's give cluster some time to be sure it's ready
 create_namespaces
 deploy_ingress_controller
-deploy_cert_manager
+# deploy_cert_manager
 deploy_external_dns
 deploy_monitoring
-setup_tls_for_postgres
+# setup_tls_for_postgres
 deploy_pgo
 setup_pgo
 deploy_postgres_cluster
