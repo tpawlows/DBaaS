@@ -1,7 +1,6 @@
 # DBaaS
 
 ## Tasks
-- fix CSRF Token error (psql&pgadmin4 connection with DB)
 - add TLS for communication Primary <-> Replica
 - create dashboards for testcases
 - create schema for AWS and kubernetes
