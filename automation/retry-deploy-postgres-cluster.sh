@@ -24,9 +24,9 @@ do
         pgo create cluster -n pgo --metrics                                                     \
             --service-type=LoadBalancer --username $PGUSER --password $PGPASSWORD               \
             --pod-anti-affinity=preferred --node-label=kops.k8s.io/instancegroup=hippo-nodes    \
-            --node-affinity-type=required --toleration=dedicated=hippo-cluster:NoSchedule       \
-            \   #--tls-only --server-ca-secret=hippo-tls --server-tls-secret=hippo-tls          \
-            hippo
+            --node-affinity-type=required --toleration=dedicated=hippo-cluster:NoSchedule hippo \
+            #--tls-only --server-ca-secret=hippo-tls --server-tls-secret=hippo-tls              \
+            
         # Add annotation of hippo cluster for external-dns
         kubectl -n pgo annotate service hippo  "external-dns.alpha.kubernetes.io/hostname=hippo.k8s.retipuj.com"
 
