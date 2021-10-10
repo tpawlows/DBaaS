@@ -530,6 +530,8 @@ dashboards:
     nginx-ingress-controller:
       gnetId: 9614
       datasource: Prometheus
+    dbaas-metrics:
+      file: dashboards/dbaas-metrics.json
   # default:
   #   some-dashboard:
   #     json: |
