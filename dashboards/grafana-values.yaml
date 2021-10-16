@@ -531,7 +531,7 @@ dashboards:
       gnetId: 9614
       datasource: Prometheus
     dbaas-metrics:
-      file: dashboards/dbaas-metrics.json
+      url: https://raw.githubusercontent.com/tpawlows/dbaas/non-TLS/dashboards/dbaas-metrics.json
   # default:
   #   some-dashboard:
   #     json: |
