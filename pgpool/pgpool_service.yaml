@@ -7,6 +7,6 @@ spec:
   selector:
     app: pgpool
   ports:
-  - port: 9187
+  - port: 9999
     protocol: TCP
   type: LoadBalancer
