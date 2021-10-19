@@ -85,7 +85,7 @@ EOF
 cat <<EOF >> ~/.bashrc
 # Postgres
 export PGHOST="https://hippo.k8s.retipuj.com"
-export PGPORT=5432
+export PGPORT=9999
 export PGDATABASE="hippo"
 export PGUSER="pguser"
 export PGPASSWORD=$(cat .dbaas.configuration | grep pg_password | cut -d \" -f2)
