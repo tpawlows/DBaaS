@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgpool
+  namespace: pgo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgpool
+  template:
+    metadata:
+      labels:
+        app: pgpool
+    spec:
+      containers:
+      - name: pgpool
+        image: pgpool/pgpool
+        env:
+          - name: PGPOOL_PARAMS_BACKEND_HOSTNAME0
+            value: "hippo"
+          - name: PGPOOL_PARAMS_BACKEND_PORT0
+            value: "5432"
+          - name: PGPOOL_PARAMS_BACKEND_WEIGHT0
+            value: "1"
+          - name: PGPOOL_PARAMS_BACKEND_FLAG0
+            value: "ALWAYS_PRIMARY|DISALLOW_TO_FAILOVER"
+          - name: PGPOOL_PARAMS_BACKEND_HOSTNAME1
+            value: "hippo-replica"
+          - name: PGPOOL_PARAMS_BACKEND_PORT1
+            value: "5432"
+          - name: PGPOOL_PARAMS_BACKEND_WEIGHT1
+            value: "1"
+          - name: PGPOOL_PARAMS_BACKEND_FLAG1
+            value: "DISALLOW_TO_FAILOVER"
+          - name: PGUSER_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: hippo-pguser-secret
+                key: username
+          - name: PGUSER_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: hippo-pguser-secret
+                key: password
