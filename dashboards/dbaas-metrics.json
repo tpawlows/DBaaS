@@ -16,7 +16,6 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 4,
   "links": [],
   "panels": [
     {
@@ -394,7 +393,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "Number of transactions in this database that have been committed ",
+      "description": "Number of transactions in this database that have been committed per second",
       "fieldConfig": {
         "defaults": {
           "unit": "short"
@@ -600,7 +599,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "",
+      "description": "Average utilization of CPU in percentage [0-100]%",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -854,7 +853,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(container_fs_reads_bytes_total{kops_k8s_io_instancegroup=\"hippo-nodes\", pod=~\"hippo.*\", pod!~\"hippo-backrest.*\", container=\"database\"}[60s])",
+          "expr": "rate(container_fs_reads_bytes_total{kops_k8s_io_instancegroup=\"hippo-nodes\", pod=~\"hippo.*\", device!~\"/dev/nvme0n1\", pod!~\"hippo-backrest.*\", container=\"database\"}[60s])",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
@@ -958,7 +957,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(container_fs_writes_bytes_total{kops_k8s_io_instancegroup=\"hippo-nodes\", pod=~\"hippo.*\", pod!~\"hippo-backrest.*\", container=\"database\"}[60s])",
+          "expr": "rate(container_fs_writes_bytes_total{kops_k8s_io_instancegroup=\"hippo-nodes\", pod=~\"hippo.*\", device!~\"/dev/nvme0n1\", pod!~\"hippo-backrest.*\", container=\"database\"}[60s])",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
@@ -1219,7 +1218,7 @@
       }
     }
   ],
-  "refresh": "10s",
+  "refresh": "5s",
   "schemaVersion": 27,
   "style": "dark",
   "tags": [],
@@ -1227,12 +1226,12 @@
     "list": []
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "DBaaS metrics",
   "uid": "6a6Fssv7k",
-  "version": 10
+  "version": 1
 }
