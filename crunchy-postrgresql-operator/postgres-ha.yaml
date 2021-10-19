@@ -1,0 +1,6 @@
+---
+bootstrap:
+  dcs:
+    postgresql:
+      parameters:
+        max_connections: 200
