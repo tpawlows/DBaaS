@@ -150,8 +150,8 @@ deploy_postgres_cluster() {
         if [ -z "$pgo_error" ]; then
 
             # Create PostgreSQL cluster called hippo
-            pgo create cluster -n pgo --metrics --pvc-size 10Gi                                                     \
-                --service-type=LoadBalancer --username $PGUSER --password $PGPASSWORD               \
+            pgo create cluster -n pgo --metrics --replica-count=1 --pvc-size 10Gi                   \
+                --service-type=ClusterIP --username $PGUSER --password $PGPASSWORD                  \
                 --pod-anti-affinity=preferred --node-label=kops.k8s.io/instancegroup=hippo-nodes    \
                 --node-affinity-type=required --toleration=dedicated=hippo-cluster:NoSchedule hippo \
                 #--tls-only --server-ca-secret=hippo-tls --server-tls-secret=hippo-tls              \
