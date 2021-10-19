@@ -4,7 +4,7 @@ metadata:
   name: pgpool
   namespace: pgo
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: pgpool
@@ -33,6 +33,10 @@ spec:
             value: "1"
           - name: PGPOOL_PARAMS_BACKEND_FLAG1
             value: "DISALLOW_TO_FAILOVER"
+          - name: PGPOOL_PARAMS_CONNECTION_CACHE
+            value: "off"
+          - name: PGPOOL_PARAMS_NUM_INIT_CHILDREN
+            value: "100"
           - name: PGUSER_USERNAME
             valueFrom:
               secretKeyRef:
