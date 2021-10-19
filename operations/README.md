@@ -1,4 +1,5 @@
 # Operations
+
 Instructions and necessary data to do cluster operations like:
 - scale out
 - scale in
@@ -13,9 +14,8 @@ Instructions and necessary data to do cluster operations like:
 - kubectl
 
 ## Day-2 Operations
-
 All operations presented in this section are examples with assumption, that you:
-- deployed Postgres Cluster on 2 worker nodes of type t3.medium.
+- deployed Postgres Cluster on **2 worker nodes** of type **t3.medium**.
 - deployed all postgres cluster resources (without Operator) are deployed on dedicated instances
 - rest of the services (monitoring, dasboards, ingress, external-dns, etc.) are deployed on different nodes
 
@@ -31,13 +31,14 @@ pgo scale hippo --replica-count=1 --no-prompt
 ```
 
 # Scale in
-*Scaling in application means to remove one instance of an application from the  existing group*
+*Scaling in application means to remove one instance of an application from the existing group*
 ```bash
 # Remove node from Postgres Cluster
 kops replace -f operations/instance-groups/1-instances-t3.medium.yaml
 kops update cluster --yes
 kops rolling-update cluster --yes
-# Remove one replica to Postgres Cluuster
+# Remove one replica from Postgres Cluuster
+pgo scaledown hippo --no-prompt --query | tail -n1 | awk '{print $1}' | xargs pgo scaledown hippo --no-prompt --target
 ```
 
 # Scale up
@@ -50,6 +51,7 @@ kops rolling-update cluster --yes
 ```
 
 # Scale down
+
 *Scaling down application means to move application from a machine with higher compute resources to the one with less resources*
 ```bash
 # Remove node from Postgres Cluster
