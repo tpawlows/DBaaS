@@ -21,7 +21,7 @@ do
     if [ -z "$pgo_error" ]; then
 
         # Create secret for configuring more max_connections
-        kubectl -n pgo create configmap hippo-custom-config --from-file=postgres-ha.yaml
+        kubectl -n pgo create configmap hippo-custom-config --from-file=crunchy-postrgresql-operator/postgres-ha.yaml
 
         # Create PostgreSQL cluster called hippo
         pgo create cluster -n pgo --metrics --replica-count=1 --pvc-size 10Gi --custom-config=hippo-custom-config   \
