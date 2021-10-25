@@ -59,3 +59,18 @@ kops replace -f operations/instance-groups/2-instances-t3.small.yaml
 kops update cluster --yes
 kops rolling-update cluster --yes
 ```
+# Version upgrade
+
+*Version upgrade means to replace container with postgres database from an older one to new one*
+```bash
+# Assuming that postgres cluster is deployed with centos8-13.3-4.7.0
+pgo upgrade --ccp-image-tag centos8-13.4-4.7.2  --no-prompt hippo
+```
+
+# Backup
+
+*Backup is a copy of computer data taken and stored elsewhere so that it may be used to restore the original after a data loss event. *
+```bash
+pgo backup hippo
+
+```
