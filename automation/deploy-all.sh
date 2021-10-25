@@ -181,6 +181,10 @@ deploy_postgres_cluster() {
     done
 }
 
+deply_pgpool() {
+    kubectl apply -f pgpool/pgpool_deploy.yaml -f pgpool/pgpool_service.yaml
+}
+
 setup_helm
 deploy_k8_cluster
 sleep 120 # let's give cluster some time to be sure it's ready
@@ -188,8 +192,10 @@ create_namespaces
 deploy_ingress_controller
 # deploy_cert_manager
 deploy_external_dns
+sleep 30
 deploy_monitoring
 # setup_tls_for_postgres
 deploy_pgo
 setup_pgo
 deploy_postgres_cluster
+deply_pgpool
