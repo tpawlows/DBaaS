@@ -442,10 +442,10 @@ datasources:
     datasources:
     - name: Prometheus
       type: prometheus
-      url: http://prometheus.k8s.retipuj.com
+      url: https://prometheus.k8s.retipuj.com
       isDefault: true
       readOnly: false
-      # access: proxy
+      access: proxy
 
 
 
