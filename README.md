@@ -14,9 +14,13 @@ The term “Database-as-a-Service” (DBaaS) refers to software that enables use
 
 ## What are the Common Features of DBaaS?
 •	**Automation**. Database administration, access control, monitoring, and several other tasks are completely automated. The customers do not need to concern themselves with these tasks, since they are designed in a manner that the machine itself will automatically execute all tasks without any human intervention.
+
 •	**Self-service capabilities**. Since the DBaaS software is fully automated, admin tasks can be automated as well. These tasks can be scheduled to support different database activities. DBaaS providers will support numerous automated tasks such as OS and kernel updates, back-up scheduling and restoration, software patching, and built-in replication among others.
+
 •	**On-demand usage**. Users can opt for the DBaaS as per requirement, and it only takes a couple of minutes to set up. There are overall IT savings since the customer will only pay as per usage.
+
 •	**Dynamic.** The DBaaS software is a flexible platform and will use the resources available as required. It will tailor itself to match the user’s environment needs.
+
 •	**True high availability (HA) and resilience**. DBaaS systems need to show true HA so that the system is dependable enough to continuously work without any errors. For a DBaaS system, HA means that users can run several critical applications and workloads without having to worry about a database failing or becoming unavailable due to any failure [[7]](https://www.g2.com/categories/database-as-a-service-dbaas).
 
 ## Raison d'etre.
@@ -74,6 +78,7 @@ The goal of this project is to answer the question, **wether kubernetes has matu
 	- DNS server updates
 - Used pod antiaffinity, node affinity and taints&tolerations, so database instances are deployed across dedicated nodes
 - Database Cluster deployed using Operator, not Statefulset
+- master branch with TLS and non-TLS branch without (for debug)
  
 ## Exposed services
 - https://prometheus.k8s.retipuj.com
