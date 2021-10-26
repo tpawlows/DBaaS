@@ -442,9 +442,12 @@ datasources:
     datasources:
     - name: Prometheus
       type: prometheus
-      url: https://prometheus.k8s.retipuj.com
-      access: proxy
+      url: http://prometheus.k8s.retipuj.com
       isDefault: true
+      readOnly: false
+      # access: proxy
+
+
 
 #  datasources.yaml:
 #    apiVersion: 1
@@ -527,6 +530,8 @@ dashboards:
     nginx-ingress-controller:
       gnetId: 9614
       datasource: Prometheus
+    dbaas-metrics:
+      url: https://raw.githubusercontent.com/tpawlows/dbaas/non-TLS/dashboards/dbaas-metrics.json
   # default:
   #   some-dashboard:
   #     json: |

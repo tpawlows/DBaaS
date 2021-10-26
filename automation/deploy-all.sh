@@ -149,13 +149,16 @@ deploy_postgres_cluster() {
         pgo_error=$(pgo version | tail -1 | grep  "^Error")
         if [ -z "$pgo_error" ]; then
 
-            # Create PostgreSQL cluster called hippo
-            pgo create cluster -n pgo --metrics --tls-only                                          \
-                --server-ca-secret=hippo-tls --server-tls-secret=hippo-tls                          \
-                --service-type=LoadBalancer --username $PGUSER --password $PGPASSWORD               \
-                --pod-anti-affinity=preferred --node-label=kops.k8s.io/instancegroup=hippo-nodes    \
-                --node-affinity-type=required --toleration=dedicated=hippo-cluster:NoSchedule hippo
+            # Create secret for configuring more max_connections
+            kubectl -n pgo create configmap hippo-custom-config --from-file=crunchy-postrgresql-operator/postgres-ha.yaml
 
+            # Create PostgreSQL cluster called hippo
+            pgo create cluster -n pgo --metrics --replica-count=1 --pvc-size 10Gi --custom-config=hippo-custom-config   \
+                --service-type=ClusterIP --username $PGUSER --password $PGPASSWORD                                      \
+                --pod-anti-affinity=preferred --node-label=kops.k8s.io/instancegroup=hippo-nodes                        \
+                --node-affinity-type=required --toleration=dedicated=hippo-cluster:NoSchedule hippo                     \
+                #--tls-only --server-ca-secret=hippo-tls --server-tls-secret=hippo-tls                                  \
+                
             # Add annotation of hippo cluster for external-dns
             kubectl -n pgo annotate service hippo  "external-dns.alpha.kubernetes.io/hostname=hippo.k8s.retipuj.com"
 
@@ -178,15 +181,21 @@ deploy_postgres_cluster() {
     done
 }
 
+deply_pgpool() {
+    kubectl apply -f pgpool/pgpool_deploy.yaml -f pgpool/pgpool_service.yaml
+}
+
 setup_helm
 deploy_k8_cluster
 sleep 120 # let's give cluster some time to be sure it's ready
 create_namespaces
 deploy_ingress_controller
-deploy_cert_manager
+# deploy_cert_manager
 deploy_external_dns
+sleep 30
 deploy_monitoring
-setup_tls_for_postgres
+# setup_tls_for_postgres
 deploy_pgo
 setup_pgo
 deploy_postgres_cluster
+deply_pgpool

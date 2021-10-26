@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgpool
+  namespace: pgo
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: "hippo.k8s.retipuj.com"
+spec:
+  selector:
+    app: pgpool
+  ports:
+  - port: 9999
+    protocol: TCP
+  type: LoadBalancer
