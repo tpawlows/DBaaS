@@ -4,7 +4,7 @@ metadata:
   name: pgpool
   namespace: pgo
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: pgpool
@@ -41,8 +41,8 @@ spec:
             value: "off"
           - name: PGPOOL_PARAMS_SR_CHECK_PERIOD
             value: "0"
-          - name: PGPOOL_PARAMS_STATEMENT_LEVEL_LOAD_BALANCE
-            value: "on"
+          # - name: PGPOOL_PARAMS_STATEMENT_LEVEL_LOAD_BALANCE
+          #   value: "on"
           - name: PGUSER_USERNAME
             valueFrom:
               secretKeyRef:
