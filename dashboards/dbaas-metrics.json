@@ -166,10 +166,10 @@
         "x": 8,
         "y": 0
       },
-      "id": 14,
+      "id": 17,
       "options": {
         "colorMode": "value",
-        "graphMode": "none",
+        "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -186,7 +186,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(pg_stat_activity_count{pg_cluster=\"hippo\"})",
+          "expr": "count(container_last_seen{kops_k8s_io_instancegroup=\"hippo-nodes\", pod=~\"hippo.*\", pod!~\"hippo-backrest.*\", container=\"database\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -196,7 +196,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Current Connections",
+      "title": "DB instances",
       "type": "stat"
     },
     {
@@ -403,8 +403,8 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
-        "w": 12,
+        "h": 10,
+        "w": 24,
         "x": 0,
         "y": 3
       },
@@ -497,6 +497,110 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
+      "description": "Average utilization of CPU in percentage [0-100]%",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 13
+      },
+      "hiddenSeries": false,
+      "id": 9,
+      "interval": "10s",
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "maxDataPoints": 3000,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.5",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "rate(container_cpu_user_seconds_total{kops_k8s_io_instancegroup=\"hippo-nodes\", pod=~\"hippo.*\", pod!~\"hippo-backrest.*\", container=\"database\"}[60s]) * 10",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{ pod }} CPU Usage [%]",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "CPU Utilization",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:232",
+          "format": "percent",
+          "label": "CPU",
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
+        },
+        {
+          "$$hashKey": "object:233",
+          "decimals": null,
+          "format": "Bps",
+          "label": "Network Receive Rate",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
       "description": "Length of time in seconds of the longest idle in transaction session ",
       "fieldConfig": {
         "defaults": {},
@@ -508,7 +612,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 3
+        "y": 13
       },
       "hiddenSeries": false,
       "id": 15,
@@ -599,7 +703,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "Average utilization of CPU in percentage [0-100]%",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -610,25 +713,21 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 12
+        "y": 22
       },
       "hiddenSeries": false,
-      "id": 9,
-      "interval": "10s",
+      "id": 14,
       "legend": {
-        "alignAsTable": false,
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
-        "rightSide": false,
         "show": true,
         "total": false,
         "values": false
       },
       "lines": true,
       "linewidth": 1,
-      "maxDataPoints": 3000,
       "nullPointMode": "null",
       "options": {
         "alertThreshold": true
@@ -645,11 +744,11 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(container_cpu_user_seconds_total{kops_k8s_io_instancegroup=\"hippo-nodes\", pod=~\"hippo.*\", pod!~\"hippo-backrest.*\", container=\"database\"}[60s]) * 100",
-          "hide": false,
+          "expr": "sum(pg_stat_activity_count{pg_cluster=\"hippo\"})",
+          "format": "time_series",
+          "instant": false,
           "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{ pod }} CPU Usage [%]",
+          "legendFormat": "hippo",
           "refId": "A"
         }
       ],
@@ -657,7 +756,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "CPU Utilization",
+      "title": "Current Connections",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -673,23 +772,22 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:232",
-          "format": "percent",
-          "label": "CPU",
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:233",
-          "decimals": null,
-          "format": "Bps",
-          "label": "Network Receive Rate",
+          "$$hashKey": "object:72",
+          "format": "short",
+          "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": false
+          "show": true
+        },
+        {
+          "$$hashKey": "object:73",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
         }
       ],
       "yaxis": {
@@ -714,7 +812,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 12
+        "y": 22
       },
       "hiddenSeries": false,
       "id": 12,
@@ -818,7 +916,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 21
+        "y": 31
       },
       "hiddenSeries": false,
       "id": 13,
@@ -922,7 +1020,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 21
+        "y": 31
       },
       "hiddenSeries": false,
       "id": 11,
@@ -1027,7 +1125,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 30
+        "y": 40
       },
       "hiddenSeries": false,
       "id": 8,
@@ -1131,7 +1229,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 30
+        "y": 40
       },
       "hiddenSeries": false,
       "id": 10,
