@@ -17,6 +17,8 @@ spec:
       - name: pgpool
         image: pgpool/pgpool
         env:
+          - name: PGPOOL_PARAMS_SSL
+            value: "ON"
           - name: PGPOOL_PARAMS_BACKEND_HOSTNAME0
             value: "hippo"
           - name: PGPOOL_PARAMS_BACKEND_PORT0
