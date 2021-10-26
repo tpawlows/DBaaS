@@ -1,0 +1,1 @@
+pgbench -c 25 -j 8 -T 7200 --no-vacuum hippo
