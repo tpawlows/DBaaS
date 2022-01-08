@@ -18,15 +18,27 @@ spec:
   - cpuRequest: 200m
     etcdMembers:
     - encryptedVolume: true
-      instanceGroup: master-eu-north-1a
-      name: a
+      instanceGroup: master-eu-north-1a-1
+      name: etcd-1
+    - encryptedVolume: true
+      instanceGroup: master-eu-north-1a-2
+      name: etcd-2
+    - encryptedVolume: true
+      instanceGroup: master-eu-north-1a-3
+      name: etcd-3
     memoryRequest: 100Mi
     name: main
   - cpuRequest: 100m
     etcdMembers:
     - encryptedVolume: true
-      instanceGroup: master-eu-north-1a
-      name: a
+      instanceGroup: master-eu-north-1a-1
+      name: etcd-1
+    - encryptedVolume: true
+      instanceGroup: master-eu-north-1a-2
+      name: etcd-2
+    - encryptedVolume: true
+      instanceGroup: master-eu-north-1a-3
+      name: etcd-3
     memoryRequest: 100Mi
     name: events
   iam:
@@ -69,14 +81,56 @@ metadata:
   creationTimestamp: null
   labels:
     kops.k8s.io/cluster: k8s.retipuj.com
-  name: master-eu-north-1a
+  name: master-eu-north-1a-1
 spec:
   image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20210907
   machineType: t3.medium
-  maxSize: 2
-  minSize: 2
+  maxSize: 1
+  minSize: 1
   nodeLabels:
-    kops.k8s.io/instancegroup: master-eu-north-1a
+    kops.k8s.io/instancegroup: master-eu-north-1a-1
+  role: Master
+  rootVolumeSize: 32
+  subnets:
+  - eu-north-1a
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: null
+  labels:
+    kops.k8s.io/cluster: k8s.retipuj.com
+  name: master-eu-north-1a-2
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20210907
+  machineType: t3.medium
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-eu-north-1a-2
+  role: Master
+  rootVolumeSize: 32
+  subnets:
+  - eu-north-1a
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: null
+  labels:
+    kops.k8s.io/cluster: k8s.retipuj.com
+  name: master-eu-north-1a-3
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20210907
+  machineType: t3.medium
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-eu-north-1a-3
   role: Master
   rootVolumeSize: 32
   subnets:
