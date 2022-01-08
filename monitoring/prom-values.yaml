@@ -921,7 +921,7 @@ server:
 
   ## Use a StatefulSet if replicaCount needs to be greater than 1 (see below)
   ##
-  replicaCount: 2
+  replicaCount: 1
 
   ## Annotations to be added to deployment
   ##
@@ -931,7 +931,7 @@ server:
     ## If true, use a statefulset instead of a deployment for pod management.
     ## This allows to scale replicas to more than 1 pod
     ##
-    enabled: true
+    enabled: false
 
     annotations: {}
     labels: {}
@@ -1036,8 +1036,8 @@ server:
     ## service to connect to a specific replica to have a consistent view
     ## of the data.
     statefulsetReplica:
-      enabled: true
-      replica: 2
+      enabled: false
+      replica: 1
 
   ## Prometheus server pod termination grace period
   ##
@@ -1154,7 +1154,7 @@ pushgateway:
       # seccomp.security.alpha.kubernetes.io/defaultProfileName: 'docker/default'
       # apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
 
-  replicaCount: 2
+  replicaCount: 1
 
   ## Annotations to be added to deployment
   ##
