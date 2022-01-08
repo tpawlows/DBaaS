@@ -543,7 +543,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(container_cpu_user_seconds_total{kops_k8s_io_instancegroup=\"hippo-nodes\", pod=~\"hippo.*\", pod!~\"hippo-backrest.*\", container=\"database\"}[60s]) * 10",
+          "expr": "rate(container_cpu_user_seconds_total{kops_k8s_io_instancegroup=\"hippo-nodes\", pod=~\"hippo.*\", pod!~\"hippo-backrest.*\", container=\"database\"}[60s])",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
@@ -646,7 +646,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "ccp_connection_stats_max_idle_in_txn_time\r*10",
+          "expr": "ccp_connection_stats_max_idle_in_txn_time",
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "{{ kubernetes_name}} {{ instance}}",
