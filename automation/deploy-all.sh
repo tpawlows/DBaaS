@@ -53,13 +53,13 @@ create_namespaces() {
 
 deploy_ingress_controller() {
     # NGINX Ingress Controller
-    helm install nginx-ingress-controller -f nginx-ingress-controller/nginx-ingress-values.yaml -n ingress ingress-nginx/ingress-nginx
+    helm install nginx-ingress-controller -f nginx-ingress-controller/nginx-ingress-values.yaml -n ingress ingress-nginx/ingress-nginx --set replicaCount=2
 }
 
 deploy_cert_manager() {
 
     kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.4.0/cert-manager.crds.yaml
-    helm install cert-manager --namespace cert-manager jetstack/cert-manager
+    helm install cert-manager --namespace cert-manager jetstack/cert-manager --set replicaCount=2
 
     # Deploy ClusterIssuer and Certificate for exposed services
     kubectl apply -f cert-manager/cluster-issuer.yaml 

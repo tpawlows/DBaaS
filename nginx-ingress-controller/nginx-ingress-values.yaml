@@ -315,9 +315,9 @@ controller:
   ##
   podAnnotations: {}
 
-  replicaCount: 1
+  replicaCount: 2
 
-  minAvailable: 1
+  minAvailable: 2
 
   # Define requests resources to avoid probe issues due to CPU utilization in busy nodes
   # ref: https://github.com/kubernetes/ingress-nginx/issues/4735#issuecomment-551204903
@@ -334,7 +334,7 @@ controller:
   # Mutually exclusive with keda autoscaling
   autoscaling:
     enabled: false
-    minReplicas: 1
+    minReplicas: 2
     maxReplicas: 11
     targetCPUUtilizationPercentage: 50
     targetMemoryUtilizationPercentage: 50
@@ -357,7 +357,7 @@ controller:
   # 2.x = keda.sh/v1alpha1
   # 1.x = keda.k8s.io/v1alpha1
     enabled: false
-    minReplicas: 1
+    minReplicas: 2
     maxReplicas: 11
     pollingInterval: 30
     cooldownPeriod: 300
@@ -721,9 +721,9 @@ defaultBackend:
   ##
   podAnnotations: {}
 
-  replicaCount: 1
+  replicaCount: 2
 
-  minAvailable: 1
+  minAvailable: 2
 
   resources: {}
   # limits:
@@ -744,8 +744,8 @@ defaultBackend:
   #    emptyDir: {}
 
   autoscaling:
-    enabled: false
-    minReplicas: 1
+    enabled: true
+    minReplicas: 2
     maxReplicas: 2
     targetCPUUtilizationPercentage: 50
     targetMemoryUtilizationPercentage: 50

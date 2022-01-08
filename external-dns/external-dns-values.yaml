@@ -492,7 +492,7 @@ extraEnv: []
 
 ## Replica count
 ##
-replicas: 1
+replicas: 2
 
 ## Pod affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
