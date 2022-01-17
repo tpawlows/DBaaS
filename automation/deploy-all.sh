@@ -58,7 +58,7 @@ deploy_ingress_controller() {
 
 deploy_cert_manager() {
 
-    kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.4.0/cert-manager.crds.yaml
+    kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.crds.yaml
     helm install cert-manager --namespace cert-manager jetstack/cert-manager --set replicaCount=2
 
     # Deploy ClusterIssuer and Certificate for exposed services
